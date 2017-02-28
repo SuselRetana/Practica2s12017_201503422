@@ -13,7 +13,7 @@ class Cola(object):
 		self.Fin = None	
 		self.tamano = 0
 
-	def offer(self, valor):
+	def queue(self, valor):
 		nuevo = NodoCola()
 		nuevo.Valor = valor						
 		if not self.tamano==0:
@@ -24,7 +24,7 @@ class Cola(object):
 			self.Fin=nuevo
 		self.tamano+=1
 
-	def peek(self):
+	def dequeue(self):
 		if not self.tamano==0:
 			val=self.Cabeza.Valor
 			self.Cabeza=self.Cabeza.Siguiente
@@ -44,19 +44,15 @@ class Cola(object):
 			print(aux.Valor, "_")
 			aux = aux.Siguiente
 p=Cola()
-p.offer("Susel6")
 print p.tamano
-p.offer("Susel1")
+p.queue("Susel1")
 print p.tamano
-p.offer("Susel2")
+p.queue("Susel2")
 print p.tamano
-p.offer("Susel3")
+p.queue("Susel3")
 print p.tamano
-p.offer("Susel4")
+p.queue("Susel4")
 print p.tamano
 p.imprimir()
 
 
-
-
-				
