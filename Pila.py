@@ -36,7 +36,7 @@ class Pila(object):
 				self.Cabeza=self.Cabeza.Siguiente			
 			return val
 		else:
-				raise ValueError("Cola Vacia")
+				return("Cola Vacia")
 
 	def imprimir(self):
 		aux = self.Cabeza

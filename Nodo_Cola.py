@@ -26,17 +26,16 @@ class Cola(object):
 
 	def dequeue(self):
 		if not self.tamano==0:
-			val=self.Cabeza.Valor
-			self.Cabeza=self.Cabeza.Siguiente
+			val=self.Cabeza.Valor			
 			if self.Cabeza==self.Fin:
 				self.Fin=None
 				self.Cabeza=None
 			else:
-				self.C=self.Cabeza.Siguiente
+				self.Cabeza=self.Cabeza.Siguiente
 			self.tamano-=1
 			return val
 		else:
-				raise ValueError("Cola Vacia")
+			return("Cola Vacia")
 
 	def imprimir(self):
 		aux = self.Cabeza
@@ -44,7 +43,6 @@ class Cola(object):
 			print(aux.Valor, "_")
 			aux = aux.Siguiente
 p=Cola()
-print p.tamano
 p.queue("Susel1")
 print p.tamano
 p.queue("Susel2")
@@ -53,6 +51,15 @@ p.queue("Susel3")
 print p.tamano
 p.queue("Susel4")
 print p.tamano
-p.imprimir()
-
-
+p.queue("Susel5")
+print p.tamano
+print p.dequeue()
+print p.tamano
+print p.dequeue()
+print p.tamano
+print p.dequeue()
+print p.tamano
+print p.dequeue()
+print p.tamano
+print p.dequeue()
+print p.tamano
