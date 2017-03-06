@@ -94,6 +94,7 @@ class NodoCola(object):
 		super(NodoCola, self).__init__()		
 		self.Valor=0
 		self.Siguiente=NodoCola
+		self.Siguiente=None
 
 class Cola(object):
 	"""docstring for NodoCola"""
@@ -133,9 +134,9 @@ class NodoPila(object):
 	"""docstring for NodoCola"""
 	def __init__(self):
 		super(NodoPila, self).__init__()		
-		self.Valor=""
+		self.Valor=0
 		self.Siguiente=NodoPila
-
+		self.Siguiente=None
 class Pila(object):
 	"""docstring for NodoCola"""
 	def __init__(self):
@@ -170,6 +171,7 @@ class Pila(object):
 				return("Pila Vacia")
 #Pila clase creada, instancia de Pila:
 Pila=Pila()
+
 
 class NodoMatriz(object):
 	"""docstring for NodoMatriz"""
@@ -485,17 +487,84 @@ class Matriz(object):
 #Matriz clase creada, instancia de Matriz:
 Matriz=Matriz()
 
+class reportes(object):
+	def txtlista(self):
+		archi=open('lista.txt','w')
+		archi.close
+		self.reporteLista()		
+		print "Sale Fin"
+		pass
+	
+	def reporteLista(self):
+		archi=open('lista.txt','a')
+		archi.write("digraph G {")
+		aux=lista.Inicio
+		while aux.Siguiente!=None :
+			archi.write('"'+aux.Valor+'"->"'+aux.Siguiente.Valor+'" ')    	
+			aux=aux.Siguiente
+		archi.write("}")
+		archi.close()
+		self.ejecutar("lista")
+		pass	
+	def ejecutar(self,nombre):   
+		import os		
+		dotPath = "C:\\Graphviz2.38\\bin\\dot.exe"
+		fileInputPath = nombre+".txt"
+		fileOutputPath = nombre+".jpg"
+		tParam = " -Tjpg "
+		tOParam = " -o "
+		tuple = (dotPath +tParam+ fileInputPath+tOParam+fileOutputPath)
+		os.system(tuple)
+	
+	def txtpila(self):
+		archi=open('pila.txt','w')
+		archi.close
+		self.reportepila()		
+		pass
+	
+	def reportepila(self):
+		archi=open('pila.txt','a')
+		archi.write("digraph G {")
+		aux=Pila.Cabeza	
+		while aux.Valor!=Pila.Fin.Valor:
+			archi.write('"'+str(aux.Valor)+'"->"'+str(aux.Siguiente.Valor)+'" ')    	
+			aux=aux.Siguiente
+		archi.write("}")
+		archi.close()
+		self.ejecutar("pila")
+		pass	
+
+	def txtcola(self):
+		archi=open('cola.txt','w')
+		archi.close
+		self.reportecola()		
+		pass
+	
+	def reportecola(self):
+		archi=open('cola.txt','a')
+		archi.write("digraph G {")
+		aux=Cola.Cabeza
+		while aux.Siguiente!=None :
+			archi.write('"'+str(aux.Valor)+'"->"'+str(aux.Siguiente.Valor)+'" ')    	
+			aux=aux.Siguiente
+		archi.write("}")
+		archi.close()
+		self.ejecutar("cola")
+		pass		
+#Reportes clase creada, instancia de reportes:
+reportes=reportes()
 
 @app.route('/metodoWeb',methods=['POST']) 
 def hello():
 	parametro = str(request.form['dato'])
 	dato2 = str(request.form['dato2'])
-	return "Hola User " + str(parametro) + "!"
+	return "Hola Ejemplo " + str(parametro) + "!"
 
 @app.route('/agregarLista',methods=['POST']) 
 def insertarLista():
 	parametro = str(request.form['dato'])
 	lista.insertar(parametro)
+	reportes.txtlista()
 	return "insertado"
 
 @app.route('/BuscarLista',methods=['POST']) 
@@ -507,6 +576,7 @@ def BuscarLista():
 def EliminarLista():
 	parametro = int(request.form['dato'])	
 	lista.eliminar(parametro)
+	reportes.txtlista()
 	return "Eliminado"
 
 
@@ -514,24 +584,27 @@ def EliminarLista():
 def Queue():
 	parametro = int(request.form['dato'])	
 	Cola.queue(parametro)
+	reportes.txtcola()
 	return "insertado"
 
 @app.route('/Dequeue',methods=['POST']) 
 def Dequeue():
-	parametro = str(request.form['dato'])		
+	parametro = str(request.form['dato'])	
+	reportes.txtcola()	
 	return "Dato Eliminado : "+str(Cola.dequeue())
 
 @app.route('/Push',methods=['POST']) 
 def Push():
-	parametro = str(request.form['dato'])	
+	parametro = int(request.form['dato'])	
 	Pila.push(parametro)
+	reportes.txtpila()
 	return "insertado"
 
 @app.route('/Pop',methods=['POST']) 
 def Pop():
-	parametro = str(request.form['dato'])		
+	parametro = str(request.form['dato'])	
+	reportes.txtpila()	
 	return "Dato Eliminado : "+str(Pila.pop())
-
 
 @app.route('/InsertarMatriz',methods=['POST']) 
 def InsertarMatriz():

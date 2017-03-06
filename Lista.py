@@ -63,3 +63,43 @@ class Lista(object):
 				sig=aux.Siguiente.Siguiente
 				aux.Siguiente=sig
 				self.tamano-=1
+
+lista=Lista()
+lista.insertar("1l")
+lista.insertar("2l")
+lista.insertar("3l")
+lista.insertar("4l")
+lista.insertar("5l")
+class reportes(object):
+	def txtlista(self):
+		archi=open('lista.txt','w')
+		archi.close
+		self.reporteLista()
+		print "Sale Fin"
+		pass
+	
+	def reporteLista(self):
+		archi=open('lista.txt','a')
+		archi.write("digraph G {")
+		aux=lista.Inicio
+		while aux.Siguiente!=None :
+			archi.write('"'+aux.Valor+'"->"'+aux.Siguiente.Valor+'" ')    	
+			aux=aux.Siguiente
+		archi.write("}")
+		archi.close()
+		self.ejecutar("lista")
+		print"Sale Fin1"
+		pass	
+	def ejecutar(self,nombre):    
+		import os		
+		dotPath = "C:\\Graphviz2.38\\bin\\dot.exe"
+		fileInputPath = "C:\\Users\\freni_000\\Desktop\\Semestre5\\EstructurasdeDatos\\Practica2s12017_201503422\\Practica2s12017_201503422\\"+nombre+".txt"
+		fileOutputPath = "C:\\Users\\freni_000\\Desktop\\Semestre5\\EstructurasdeDatos\\Practica2s12017_201503422\\Practica2s12017_201503422\\"+nombre+".jpg"
+		tParam = " -Tjpg "
+		tOParam = " -o "
+		tuple = (dotPath +tParam+ fileInputPath+tOParam+fileOutputPath)
+		os.system(tuple)	
+		print"Sale Fin2"
+#Reportes clase creada, instancia de reportes:
+reportes=reportes()
+reportes.txtlista()
