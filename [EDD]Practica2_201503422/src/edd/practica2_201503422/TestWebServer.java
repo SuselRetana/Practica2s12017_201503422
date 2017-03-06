@@ -102,7 +102,39 @@ public class TestWebServer {
                 .build();
         String r = getString("Dequeue", formBody); 
         System.out.println(r);
-    }       
+    }    
+          public static void InsertarMatriz(String Valor)
+    {
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("dato", Valor)
+                .build();
+        String r = getString("InsertarMatriz", formBody); 
+        System.out.println(r);
+    }  
+          public static void BuscarLetra(String Valor)
+    {
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("dato", Valor)
+                .build();
+        String r = getString("BuscarLetra", formBody); 
+        System.out.println(r);
+    }  
+            public static void EliminarMatriz(String Valor)
+    {
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("dato", Valor)
+                .build();
+        String r = getString("EliminarMatriz", formBody); 
+        System.out.println(r);
+    }  
+             public static void BuscarDominio(String Valor)
+    {
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("dato", Valor)
+                .build();
+        String r = getString("BuscarDominio", formBody); 
+        System.out.println(r);
+    }  
      public static String getString(String metodo, RequestBody formBody) {
 
         try {

@@ -226,27 +226,33 @@ class Matriz(object):
 	def imprimirL(self,letra) :	
 		dominio=""
 		act=self.buscar(letra)
-		while act.Derecha!=None:
+		if act!=None:			
+			while act.Derecha!=None:
+				dominio=dominio+ "["+act.Nombre+"]->"
+				if act.AbajoP!=None :	
+					dominio=dominio+self.imprimirP(act)
+				act=act.Derecha
 			dominio=dominio+ "["+act.Nombre+"]->"
 			if act.AbajoP!=None :	
 				dominio=dominio+self.imprimirP(act)
-			act=act.Derecha
-		dominio=dominio+ "["+act.Nombre+"]->"
-		if act.AbajoP!=None :	
-				dominio=dominio+self.imprimirP(act)
+		else :
+			dominio="Letra no Existente"
 		return dominio
 
 	def imprimirC(self,correo) :
 		dominio=""		
 		act=self.buscar(correo)
-		while act.Abajo!=None:
+		if act!=None :			
+			while act.Abajo!=None:
+				dominio=dominio+ "["+act.Nombre+"]->"
+				if act.AbajoP!=None :	
+					dominio=dominio+self.imprimirP(act)
+				act=act.Abajo
 			dominio=dominio+ "["+act.Nombre+"]->"
 			if act.AbajoP!=None :	
-				dominio=dominio+self.imprimirP(act)
-			act=act.Abajo
-		dominio=dominio+ "["+act.Nombre+"]->"
-		if act.AbajoP!=None :	
-				dominio=dominio+self.imprimirP(act)
+				dominio=dominio+self.imprimirP(act)			
+		else:
+			dominio="Correo No Existente"
 		return dominio	
 
 	def imprimirP(self,letra) :	
@@ -259,18 +265,71 @@ class Matriz(object):
 		dominio=dominio+ "["+act.Nombre+"]->"	
 		return dominio	
 
-#	def eliminar(self,Nombre,Correo,Letra):
-#		Eliminar=self.buscar(Letra)
-#		encontrado=False
-#		while Eliminar!=None and encontrado==False:
-#			if Eliminar.Correo==Correo:
-#				encontrado=True
-#			else:
-#				Eliminar=Eliminar.Derecha
-#		encontrado=False
-#		if Eliminar.Nombre==Nombre :			
-			
-#			Aux=Eliminar
+	def eliminar(self,Nombre,Correo,Letra):
+		Eliminar=self.buscar(Letra)
+		encontrado=False
+		while Eliminar!=None and encontrado==False:
+			if Eliminar.Correo==Correo:
+				encontrado=True
+			else:
+				Eliminar=Eliminar.Derecha
+		encontrado=False
+		if Eliminar.Nombre==Nombre :						
+			if Eliminar.AbajoP!=None:							
+				Aux2=Eliminar.AbajoP
+				Aux2.ArribaP=None				
+				Aux2.Arriba=Eliminar.Arriba				
+				Aux2.Izquierda=Eliminar.Izquierda
+				Eliminar.Izquierda.Derecha=Aux2
+				Eliminar.Arriba.Abajo=Aux2
+				if Eliminar.Derecha!=None:
+					Aux2.Derecha=Eliminar.Derecha
+					Eliminar.Derecha.Izquierda=Aux2
+				if Eliminar.Abajo!=None:
+					Aux2.Abajo=Eliminar.Abajo
+					Eliminar.Abajo.Arriba=Aux2	
+			else :
+				if Eliminar.Derecha!=None:
+					Eliminar.Derecha.Izquierda=Eliminar.Izquierda
+					Eliminar.Izquierda.Derecha=Eliminar.Derecha
+				else :
+					Eliminar.Izquierda.Derecha=None
+				if Eliminar.Abajo!=None:
+					Eliminar.Abajo.Arriba=Eliminar.Arriba
+					Eliminar.Arriba.Abajo=Eliminar.Abajo
+				else :
+					Eliminar.Arriba.Abajo=None
+					self.EliminarComp(self.buscar(Letra),self.buscar(Correo))	
+			Eliminar=None
+		else :	
+			while Eliminar.AbajoP!=None and encontrado==False:
+				Eliminar=Eliminar.AbajoP
+				if Eliminar.Nombre==Nombre:
+					encontrado=True
+			if Eliminar.AbajoP!=None:
+				Eliminar.ArribaP.AbajoP=Eliminar.AbajoP
+				Eliminar.AbajoP.ArribaP=Eliminar.ArribaP
+			else:	
+				Eliminar.ArribaP.AbajoP=None
+				Eliminar.ArribaP=None
+			Eliminar=None				
+	
+	def EliminarComp(self,Letra,Correo):
+		if Letra.Derecha==None:
+			if Letra.Abajo!=None:
+				Letra.Arriba.Abajo=Letra.Abajo
+				Letra.Abajo.Arriba=Letra.Arriba
+			else:	
+				Letra.Arriba.Abajo=None			
+			Letra=None
+		if Correo.Abajo==None:
+			if Correo.Derecha!=None:
+				Correo.Izquierda.Derecha=Correo.Derecha
+				Correo.Derecha.Izquierda=Correo.Izquierda
+			else:	
+				Correo.Izquierda.Derecha=None			
+			Correo=None
+
 
 		
 p=Matriz()
@@ -284,10 +343,6 @@ p.insertar("cesar","yahoo","c")
 p.insertar("medrano","yahoo","m")
 p.insertar("pedro","yahoo","p")
 p.insertar("pablo","yahoo","p")
-p.insertar("suselhot","hotmail","s")
-p.insertar("anahot","hotmail","a")
-p.insertar("suselby","by","s")
-p.insertar("anaby","by","a")
 print "L E T R A S:"
 p.imprimirLetras()
 print "C O R R E O S:"
@@ -300,15 +355,35 @@ print "L E T R A : M"
 print p.imprimirL("m")
 print "L E T R A : P"
 print p.imprimirL("p")
-print "L E T R A : S"
-print p.imprimirL("s")
 print "G M A I L"
 print p.imprimirC("gmail")
 print " O U T L O O K"
 print p.imprimirC("outlook")
 print "Y A H O O "
 print p.imprimirC("yahoo")
-print "H O T M A I L"
-print p.imprimirC("hotmail")
-print "B Y "
-print p.imprimirC("by")
+print "_______E L I M I N A N D O______"
+p.eliminar("mama","gmail","m")
+p.eliminar("pablo","yahoo","p")
+p.eliminar("amy","yahoo","a")
+p.eliminar("marco","gmail","m")
+p.eliminar("pedro","yahoo","p")
+p.eliminar("carlos","outlook","c")
+
+print "L E T R A S:"
+p.imprimirLetras()
+print "C O R R E O S:"
+p.imprimirCorreos()
+print "L E T R A : A "
+print p.imprimirL("a")
+print "L E T R A : C"
+print p.imprimirL("c")
+print "L E T R A : M"
+print p.imprimirL("m")
+print "L E T R A : P"
+print p.imprimirL("p")
+print "G M A I L"
+print p.imprimirC("gmail")
+print " O U T L O O K"
+print p.imprimirC("outlook")
+print "Y A H O O "
+print p.imprimirC("yahoo")
