@@ -173,26 +173,34 @@ class Matriz(object):
 		anadir=NodoMatriz()
 		anadir.Nombre=Nombre
 		anadir.Correo=correo.Nombre
-		aux3=letra
-		aux5=letra
-		encontrado=False
-		while aux3!=None and encontrado==False:			
-			while aux5.Arriba!=None:				
-				aux5=aux5.Arriba
-			if aux5.Nombre==correo.Nombre:
-				encontrado=True
+		aux3=letra					
+		while aux3.Correo<anadir.Correo and aux3.Derecha!=None:
+			aux3=aux3.Derecha				
+		if aux3.Correo==correo.Nombre :	
+			if(aux3!=None) :
+				while aux3.AbajoP!=None :	
+					aux3=aux3.AbajoP
+			aux3.AbajoP=anadir
+			anadir.ArribaP=aux3		
+		else : 
+			if aux3.Correo>anadir.Correo:												
+				aux3=aux3.Izquierda
+			anadir.Izquierda=aux3
+			if(aux3.Derecha!=None):	
+				aux3.Derecha.Izquierda=anadir
+				anadir.Derecha=aux3.Derecha			
+			aux3.Derecha=anadir			
+			aux=correo.Abajo
+			while aux.Nombre<Nombre and aux.Abajo!=None:	
+				aux=aux.Abajo		
+			if aux.Nombre<Nombre:								
+				aux.Abajo=anadir
+				anadir.Arriba=aux
 			else :	
-				aux3=aux3.Derecha
-				aux5=aux3
-		aux5=aux3
-
-		while aux3.AbajoP!=None :	
-			print aux3.Nombre								
-			aux3=aux3.AbajoP
-		
-		aux3.AbajoP=anadir
-		anadir.ArribaP=aux3
-		self.imprimirP(aux5)
+				aux.Arriba.Abajo=anadir
+				anadir.Arriba=aux.Arriba
+				anadir.Abajo=aux
+				aux.Arriba=anadir	
 
 
 	def imprimirCorreos(self):
@@ -217,58 +225,90 @@ class Matriz(object):
 			act=act.Arriba
 	def imprimirL(self,letra) :	
 		dominio=""
-		dom=""
 		act=self.buscar(letra)
 		while act.Derecha!=None:
 			dominio=dominio+ "["+act.Nombre+"]->"
+			if act.AbajoP!=None :	
+				dominio=dominio+self.imprimirP(act)
 			act=act.Derecha
 		dominio=dominio+ "["+act.Nombre+"]->"
-		print dominio
-		print "I Z Q U I E R D A"
-		while act!=None:
-			dom=dom+ "["+act.Nombre+"]->"
-			act=act.Izquierda
-		print dom
+		if act.AbajoP!=None :	
+				dominio=dominio+self.imprimirP(act)
+		return dominio
+
 	def imprimirC(self,correo) :
-		dominio=""
-		dom=""	
+		dominio=""		
 		act=self.buscar(correo)
 		while act.Abajo!=None:
 			dominio=dominio+ "["+act.Nombre+"]->"
+			if act.AbajoP!=None :	
+				dominio=dominio+self.imprimirP(act)
 			act=act.Abajo
 		dominio=dominio+ "["+act.Nombre+"]->"
-		print dominio
-		print "A R R I B A"
-		while act!=None:
-			dom=dom+ "["+act.Nombre+"]->"
-			act=act.Arriba
-		print dom
+		if act.AbajoP!=None :	
+				dominio=dominio+self.imprimirP(act)
+		return dominio	
 
 	def imprimirP(self,letra) :	
+		act=letra.AbajoP		
+		encontrado=False
 		dominio=""
-		dom=""
-		act=letra
-		while act.AbajoP!=None:
+		while act.AbajoP!=None:			
 			dominio=dominio+ "["+act.Nombre+"]->"
 			act=act.AbajoP
-		dominio=dominio+ "["+act.Nombre+"]->"
-		print dominio
-		print "I Z Q U I E R D A"
-		while act!=None:
-			dom=dom+ "["+act.Nombre+"]->"
-			act=act.ArribaP		
+		dominio=dominio+ "["+act.Nombre+"]->"	
+		return dominio	
+
+#	def eliminar(self,Nombre,Correo,Letra):
+#		Eliminar=self.buscar(Letra)
+#		encontrado=False
+#		while Eliminar!=None and encontrado==False:
+#			if Eliminar.Correo==Correo:
+#				encontrado=True
+#			else:
+#				Eliminar=Eliminar.Derecha
+#		encontrado=False
+#		if Eliminar.Nombre==Nombre :			
+			
+#			Aux=Eliminar
+
+		
 p=Matriz()
-p.insertar("muselgmail","gmail","m")
-
-p.insertar("maselgmail","gmail","m")
-
-p.insertar("milolgmail","gmail","m")
-print "terminado"
-p.insertar("Suselgmail","yahoo","s")
-p.insertar("elgmail","yahoo","e")
+p.insertar("ana","gmail","a")
+p.insertar("marco","gmail","m")
+p.insertar("mama","gmail","m")
+p.insertar("mono","gmail","m")
+p.insertar("carlos","outlook","c")
+p.insertar("amy","yahoo","a")
+p.insertar("cesar","yahoo","c")
+p.insertar("medrano","yahoo","m")
+p.insertar("pedro","yahoo","p")
+p.insertar("pablo","yahoo","p")
+p.insertar("suselhot","hotmail","s")
+p.insertar("anahot","hotmail","a")
+p.insertar("suselby","by","s")
+p.insertar("anaby","by","a")
+print "L E T R A S:"
 p.imprimirLetras()
-
+print "C O R R E O S:"
 p.imprimirCorreos()
-p.imprimirC("gmail")
-p.imprimirL("m")
-print "terminado"
+print "L E T R A : A "
+print p.imprimirL("a")
+print "L E T R A : C"
+print p.imprimirL("c")
+print "L E T R A : M"
+print p.imprimirL("m")
+print "L E T R A : P"
+print p.imprimirL("p")
+print "L E T R A : S"
+print p.imprimirL("s")
+print "G M A I L"
+print p.imprimirC("gmail")
+print " O U T L O O K"
+print p.imprimirC("outlook")
+print "Y A H O O "
+print p.imprimirC("yahoo")
+print "H O T M A I L"
+print p.imprimirC("hotmail")
+print "B Y "
+print p.imprimirC("by")
